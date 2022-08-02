@@ -1,0 +1,16 @@
+{
+  "name": "unimicro-uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "devstart": "nodemon liveserver.js --ext js",
+    "start": "node liveserver.js"
+  },
+  "author": "Larskrs",
+  "license": "ISC",
+  "dependencies": {
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "nodemon": "^2.0.19"
+  }
+}
