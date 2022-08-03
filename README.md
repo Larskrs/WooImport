@@ -12,18 +12,10 @@ ____________________________________________________________________
 ```
 
 ## Transport Methods:
-> ### JSON
-```JSON
-  {
-    "data" : [
-      "bill" : {
-        "first_name" : "Joe",
-        "last_name" : "Bill",
-        "phone" : "undefined",
-        "email" : "joebill@samplemail.com"
-      }
-    ]
-  }
+> ### CSV
+#### Great for importing straight into other billing services like Unimicro.
+```CSV
+first_name,last_name,company,address_1,address_2,city,state,postcode,country,email,phone
 ```
 
-> ### (under development)
+
