@@ -43,7 +43,7 @@ function getStatusColor (status) {
         
 function getOrders () {
 
-    checkedOrders = JSON.parse(fs.readFileSync(__dirname + "/shownorders.json", 'utf8'))['data'];
+    checkedOrders = loadShownOrders();
 
     WooCommerce.get('orders', { 
             page : 1,
@@ -103,9 +103,17 @@ function getOrders () {
 
     function exportBillToCSV (bills) {
 
+        checkedOrders = loadShownOrders();
+        csv = "";
+        // get the export path
+        exportPath = __dirname + "/bills.csv";
+        if (fs.existsSync(exportPath)) {
+            csv = fs.readFileSync(exportPath, 'utf8');
+        }
+
         // get the amount of bills that have not been exported
         let billsToExport = bills.filter(bill => !isAlreadyExported(bill.id));
-
+        
         if (billsToExport.length <= 0) {
             console.log('\x1b[33m', `No new bills to export`, '\x1b[0m');
             return;
@@ -114,7 +122,6 @@ function getOrders () {
 
         console.log('\x1b[33m', `Exporting bills [${billsToExport.length}] to file`, '\x1b[0m');
         
-        csv = "";
         
         for (let i = 0; i < bills.length; i++) {
             if (!isAlreadyExported(bills[i].id)) {
@@ -123,6 +130,7 @@ function getOrders () {
         }
 
         console.log(csv);
+        
         fs.writeFileSync(__dirname + "/bills.csv", csv, 'utf8');
 
     }
@@ -147,10 +155,19 @@ function getOrders () {
         });
         csv += '\n';
         checkedOrders.push(bill.id);
+        
         return csv;
     }
     function isAlreadyExported (id) {
         return checkedOrders.indexOf(id) != -1;
+    }
+
+    function loadShownOrders () {
+        if (fs.existsSync(__dirname + "/shownorders.json")) {
+            return JSON.parse(fs.readFileSync(__dirname + "/shownorders.json", 'utf8'))['data'];
+        } else {
+            return [];
+        }
     }
 
 module.exports = { loadLive };
