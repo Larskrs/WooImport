@@ -1,3 +1,29 @@
-# WooImport
-Allows you to export orders from WooCommerce into other areas with ease.
 
+ 
+```
+ _       __            ____                           __          ___
+| |     / /___  ____  /  _/___ ___  ____  ____  _____/ /_   _   _<  /
+| | /| / / __ \/ __ \ / // __ `__ \/ __ \/ __ \/ ___/ __/  | | / / / 
+| |/ |/ / /_/ / /_/ // // / / / / / /_/ / /_/ / /  / /_    | |/ / /  
+|__/|__/\____/\____/___/_/ /_/ /_/ .___/\____/_/   \__/    |___/_/   
+                                /_/ Created by Larskrs                                                 
+____________________________________________________________________
+
+```
+
+## Transport Methods:
+> ### JSON
+```JSON
+  {
+    "data" : [
+      "bill" : {
+        "first_name" : "Joe",
+        "last_name" : "Bill",
+        "phone" : "undefined",
+        "email" : "joebill@samplemail.com"
+      }
+    ]
+  }
+```
+
+> ### (under development)
