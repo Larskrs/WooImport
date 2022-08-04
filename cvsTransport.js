@@ -1,3 +1,5 @@
+function exportData () {
 
+}
 
-module.exports = { export };
+module.exports = { exportData };
