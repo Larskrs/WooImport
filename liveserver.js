@@ -23,7 +23,8 @@ const liveMode = require('./livemode');
 const readline = require('readline');
 const rl = readline.createInterface({
 input: process.stdin,
-output: process.stdout
+output: process.stdout,
+terminal: false
 });
 
 const yaml = require('js-yaml');
@@ -77,7 +78,7 @@ function showTitle() {
     // show console startup logo and message
     
     try {
-        const data = fs.readFileSync(__dirname + "/logo.txt", 'utf8');
+        const data = fs.readFileSync(__dirname + "/assets/logo.txt", 'utf8');
         console.log(data);
         
     } catch (err) {

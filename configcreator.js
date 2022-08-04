@@ -1,6 +1,7 @@
 const rl = require('readline').createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
+    terminal: false
 });
 
 const liveServer = require('./liveserver');
