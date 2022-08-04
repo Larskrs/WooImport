@@ -69,7 +69,7 @@ function createConfSetup() {
 
 function createConf(settings) {
     console.log('\x1b[33m', 'Creating config file', '\x1b[0m');
-    fs.writeFileSync('./liveconfig.yml', settings);
+    fs.writeFileSync('./config.yml', settings);
     console.log('\x1b[32m', 'Config file created', '\x1b[0m');
     loadConf();
 }

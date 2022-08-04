@@ -7,9 +7,15 @@
 // ____________________________________________________________________
 
 
+const fs = require('fs');
+
+loadNPM();
+
+
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
 const app = express();
 const configCreator = require('./configcreator');
 const liveMode = require('./livemode');
@@ -35,6 +41,24 @@ app.listen(port, () => {
 
 }
 
+function loadNPM() {
+    // Check if node_modules folder exists
+    if (fs.existsSync(__dirname + "/node_modules")) {
+        console.log('\x1b[32m', `Node modules are installed`, '\x1b[0m');
+        return true;
+    }
+    else {
+        console.log('\x1b[33m', `Node modules are not installed`, '\x1b[0m');
+        console.log('\x1b[33m', `Installing Node modules`, '\x1b[0m');
+        require('child_process').execSync('npm install');
+        console.log('\x1b[32m', `Node modules are installed`, '\x1b[0m');
+        // tell the client that we will now try to load the npm modules again
+        console.log('\x1b[33m', `Attempting to reload the server.`, '\x1b[0m');
+        setTimeout(() => {
+            loadNPM();
+        }), 4000;
+    }
+}
 // check connection to wordpress website rest api 
 // https://www.planbit.no/wp-json/wc/v3?
 // https://www.planbit.no/wp-json/wc/v3/products?
@@ -66,7 +90,7 @@ onStart();
 
 function onStart () {
 
-    if (fs.existsSync(__dirname + "/liveconfig.yml")) {
+    if (fs.existsSync(__dirname + "/config.yml")) {
         console.log(' Config file found');
     loadConf();
     } else {
@@ -83,7 +107,7 @@ function loadConf() {
     
 
     console.log('\x1b[33m', 'Loading config file', '\x1b[0m');
-    config = yaml.safeLoad(fs.readFileSync('./liveconfig.yml', 'utf8'));
+    config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
     
     loadWoocommerce(config.url, config.consumerKey, config.consumerSecret);
 
@@ -140,12 +164,7 @@ console.log('\x1b[33m', 'Loading WooCommerce API', '\x1b[0m');
     
 }
 
-function createConf(settings) {
-    if (settings)
-    fs.writeFileSync(__dirname + "/liveconfig.yml", settings, 'utf8');
 
-    onStart();
-}
 
 
 
