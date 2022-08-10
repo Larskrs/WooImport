@@ -1,6 +1,16 @@
+let logo = `
+_       __            ____                           __          ___
+| |     / /___  ____  /  _/___ ___  ____  ____  _____/ /_   _   _<  /
+| | /| / / __ \/ __ \ / // __  __ \/ __ \/ __ \/ ___/ __/  | | / / / 
+| |/ |/ / /_/ / /_/ // // / / / / / /_/ / /_/ / /  / /_    | |/ / /  
+|__/|__/\____/\____/___/_/ /_/ /_/ .___/\____/_/   \__/    |___/_/   
+                                /_/ Created by Larskrs                                                 
+____________________________________________________________________ 
+`;
+
 // _       __            ____                           __          ___
 // | |     / /___  ____  /  _/___ ___  ____  ____  _____/ /_   _   _<  /
-// | | /| / / __ \/ __ \ / // __ `__ \/ __ \/ __ \/ ___/ __/  | | / / / 
+// | | /| / / __ \/ __ \ / // __  __ \/ __ \/ __ \/ ___/ __/  | | / / / 
 // | |/ |/ / /_/ / /_/ // // / / / / / /_/ / /_/ / /  / /_    | |/ / /  
 // |__/|__/\____/\____/___/_/ /_/ /_/ .___/\____/_/   \__/    |___/_/   
 //                                 /_/ Created by Larskrs                                                 
@@ -8,9 +18,16 @@
 
 
 const fs = require('fs');
+const process = require('process');
 
-loadNPM();
+let __cdirName = process.cwd();
+if (loadNPM() == false) {
+    return;
+}
 
+// import chalk.
+const chalk = require('chalk');
+// console log with chalk
 
 
 
@@ -44,7 +61,7 @@ app.listen(port, () => {
 
 function loadNPM() {
     // Check if node_modules folder exists
-    if (fs.existsSync(__dirname + "/node_modules")) {
+    if (fs.existsSync(__dirname + "/node_modules")) { // we se the non constant __dirname to get the current directory because we can not use the constant __dirname while running the script from the terminal
         console.log('\x1b[32m', `Node modules are installed`, '\x1b[0m');
         return true;
     }
@@ -52,12 +69,13 @@ function loadNPM() {
         console.log('\x1b[33m', `Node modules are not installed`, '\x1b[0m');
         console.log('\x1b[33m', `Installing Node modules`, '\x1b[0m');
         require('child_process').execSync('npm install');
-        console.log('\x1b[32m', `Node modules are installed`, '\x1b[0m');
+        console.log('\x1b[32m', `Node modules were just installed`, '\x1b[0m');
         // tell the client that we will now try to load the npm modules again
         console.log('\x1b[33m', `Attempting to reload the server.`, '\x1b[0m');
-        setTimeout(() => {
+        setTimeout(function () {
             loadNPM();
-        }), 4000;
+        }, 4000);
+        return false;
     }
 }
 // check connection to wordpress website rest api 
@@ -74,11 +92,12 @@ var eventEmitter = new events.EventEmitter();
 let config;
 
 function showTitle() {
-    console.clear();
+    //console.clear();
     // show console startup logo and message
     
     try {
-        const data = fs.readFileSync(__dirname + "/assets/logo.txt", 'utf8');
+        //const data = fs.readFileSync(__cdirName + "/assets/logo.txt", 'utf8');
+        data = logo;
         console.log(data);
         
     } catch (err) {
@@ -91,7 +110,7 @@ onStart();
 
 function onStart () {
 
-    if (fs.existsSync(__dirname + "/config.yml")) {
+    if (fs.existsSync(__cdirName + "/config.yml")) {
         console.log(' Config file found');
     loadConf();
     } else {
@@ -168,8 +187,8 @@ console.log('\x1b[33m', 'Loading WooCommerce API', '\x1b[0m');
 
 
 
+__cdirName
 
 
 
-
-module.exports = { onStart};
+module.exports = { onStart, __cdirName};

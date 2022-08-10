@@ -4,10 +4,17 @@ const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
 let WooCommerce;
 let config;
 
+const { chalk } = require("chalk");
+
+
+const process = require('process');
+let __cdirName = process.cwd();
+
+
 checkedOrders = [];
 
 function loadLive (_WooCommerce, _config) {
-            
+
             WooCommerce = _WooCommerce;
             config = _config;
             console.log('\x1b[36m', `Config is set`, '\x1b[0m');
@@ -18,7 +25,7 @@ function loop () {
     setTimeout(() => {
         getOrders();
         loop();
-    }, 5000);
+    }, 10000);
 }
         
         
@@ -50,7 +57,7 @@ function getOrders () {
             per_page : 10,
         }).then(function(result) {
 
-            // displayDebug(result.data);
+            
 
             if (config.displayMethod == 'list') {
                 displayOrdersAsList(result.data)
@@ -58,7 +65,7 @@ function getOrders () {
                 displayOnlyNewOrders(result.data);
             }
             exportBillToCSV(result.data);
-            fs.writeFileSync(__dirname + "/shownorders.json", JSON.stringify({data: checkedOrders}), 'utf8');
+            fs.writeFileSync(__cdirName + "/shownorders.json", JSON.stringify({data: checkedOrders}), 'utf8');
         }
 
     );
@@ -106,7 +113,7 @@ function getOrders () {
         checkedOrders = loadShownOrders();
         csv = "";
         // get the export path
-        exportPath = __dirname + "/bills.csv";
+        exportPath = __cdirName + "/bills.csv";
         if (fs.existsSync(exportPath)) {
             csv = fs.readFileSync(exportPath, 'utf8');
         }
@@ -131,12 +138,12 @@ function getOrders () {
 
         console.log(csv);
         
-        fs.writeFileSync(__dirname + "/bills.csv", csv, 'utf8');
+        fs.writeFileSync(__cdirName + "/bills.csv", csv, 'utf8');
 
     }
     function formatBillToCSV (bill, csv) {
 
-        billing = bill.billing;
+        billing = getModel(bill);
         // console log that we are formatting a bill
         console.log('\x1b[33m', `Formatting bill ${bill.id}`, '\x1b[0m');
         // check if this is the first bill listed.
@@ -148,6 +155,8 @@ function getOrders () {
             });
             csv += '\n';
         }
+
+
 
         Object.keys(billing).forEach(function(k){
             //console.log(k + ' - ' + billing[k]);
@@ -163,10 +172,18 @@ function getOrders () {
     }
 
     function loadShownOrders () {
-        if (fs.existsSync(__dirname + "/shownorders.json")) {
-            return JSON.parse(fs.readFileSync(__dirname + "/shownorders.json", 'utf8'))['data'];
+        if (fs.existsSync(__cdirName + "/shownorders.json")) {
+            return JSON.parse(fs.readFileSync(__cdirName + "/shownorders.json", 'utf8'))['data'];
         } else {
             return [];
+        }
+    }
+
+    function getModel (bill) {
+        if (config.transport == 'uni_customer') { 
+            return require('./transports/uni_customer.model').getModel(bill);
+        } else {
+            return require('./transports/uni_customer.model').getModel(bill);
         }
     }
 

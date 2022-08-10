@@ -1,2 +1,2 @@
-npm start
-pause
+node liveserver.js
+pause press [enter]

@@ -22,6 +22,12 @@ function createConfSetup() {
         
     rl.question ('What is your WooCommerce store URL? "https: mystore.com" ', (storeurl) => {
         settings += "url: " + storeurl + "\n";
+        rl.question ('What transport method would you like to use? (default: uni_customer) ', (transport) => {
+            if (transport === '') {
+                settings += 'transport: uni_customer\n';
+            } else {
+                settings += 'transport: ' + transport + '\n';
+            }
         rl.question ('What is your WooCommerce store consumerKey? ', (consumerKey) => {
             settings += "consumerKey: " + consumerKey + "\n";
         rl.question ('What is your WooCommerce store consumerSecret? ', (consumerSecret) => {
@@ -64,6 +70,8 @@ function createConfSetup() {
         );
     }
     );
+}
+);
 }
 );
 }
